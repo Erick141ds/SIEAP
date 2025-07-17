@@ -210,6 +210,22 @@
     .options a:hover {
       color: #226c41;
     }
+    .tooltip {
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 16px 20px;
+      font-size: 1.1rem;
+      color: #000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border-radius: 8px;
+      z-index: 1000;
+      display: none;
+      max-width: 500px;
+      line-height: 1.6;
+      white-space: pre-line;
+      word-wrap: break-word;
+      }
     </style>
 </head>
 <body>
@@ -253,6 +269,7 @@
           <td class="status Baja">Baja</td>
           <td><ion-icon name="download-outline"></ion-icon> CarreónSánchezErickDemis</td>
         </tr>
+        <div class="tooltip" id="tooltip"></div>
         <!-- Agrega más filas según necesites -->
       </tbody>
     </table>
