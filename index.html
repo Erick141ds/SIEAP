@@ -81,7 +81,21 @@
 
 
 
-    <script src="/script.js"></script>
+    <script>
+        const conteiner = document.querySelector(".conteiner")
+        const btnSingIn = document.getElementById("btn-sing-in");
+        const btnSingUp = document.getElementById("btn-sing-up");
+
+
+
+
+        btnSingIn.addEventListener("click", ()=>{
+        conteiner.classList.remove("toggle");
+        })
+        btnSingUp.addEventListener("click", ()=>{
+        conteiner.classList.add("toggle");
+        })
+    </script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
