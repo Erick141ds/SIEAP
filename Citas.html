@@ -226,7 +226,7 @@
 
     .modal-content {
       background-color: white;
-      margin: 15% auto;
+      margin: 10% auto;
       padding: 20px;
       border-radius: 10px;
       width: 300px;
@@ -247,13 +247,21 @@
     }
 
     .modal-buttons button:first-child {
-      background-color: #d9534f;
+      background-color: #226c41;
       color: white;
     }
 
     .modal-buttons button:last-child {
-      background-color: #5bc0de;
+      background-color: #d9534f;
       color: white;
+    }
+
+    .modal-content input[type="date"],
+    .modal-content input[type="time"] {
+      padding: 5px;
+      width: 90%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
     </style>
 </head>
@@ -379,7 +387,8 @@
   <div class="contenido">
     <!-- Aquí vas a meter contenido -->
   </div>
-  <div id="modalCancelar" class="modal">
+  <!-- MODAL PARA CANCELAR -->
+<div id="modalCancelar" class="modal">
   <div class="modal-content">
     <h3>¿Estás seguro de cancelar la cita?</h3>
     <div class="modal-buttons">
@@ -392,10 +401,14 @@
 <!-- MODAL PARA REPROGRAMAR -->
 <div id="modalReprogramar" class="modal">
   <div class="modal-content">
-    <h3>¿Deseas reprogramar esta cita?</h3>
+    <h3>Reprogramar Cita</h3>
+    <label for="nuevaFecha">Nueva Fecha:</label>
+    <input type="date" id="nuevaFecha"><br><br>
+    <label for="nuevaHora">Nueva Hora:</label>
+    <input type="time" id="nuevaHora"><br><br>
     <div class="modal-buttons">
-      <button onclick="confirmarReprogramar()">Sí, Reprogramar</button>
-      <button onclick="cerrarModal('modalReprogramar')">No</button>
+      <button onclick="confirmarReprogramar()">Confirmar</button>
+      <button onclick="cerrarModal('modalReprogramar')">Cancelar</button>
     </div>
   </div>
 </div>
@@ -439,7 +452,7 @@
       }
       let filaSeleccionada = null;
 
-  // Íconos de cancelar
+  // Asignar eventos a íconos de cancelar
   document.querySelectorAll('ion-icon[name="trash-outline"]').forEach(icon => {
     icon.style.cursor = 'pointer';
     icon.addEventListener('click', function () {
@@ -448,7 +461,7 @@
     });
   });
 
-  // Íconos de reprogramar
+  // Asignar eventos a íconos de reprogramar
   document.querySelectorAll('ion-icon[name="refresh-outline"]').forEach(icon => {
     icon.style.cursor = 'pointer';
     icon.addEventListener('click', function () {
@@ -457,28 +470,56 @@
     });
   });
 
-  // Cierra el modal
+  // Cerrar cualquier modal
   function cerrarModal(id) {
     document.getElementById(id).style.display = 'none';
     filaSeleccionada = null;
+    document.getElementById('nuevaFecha').value = '';
+    document.getElementById('nuevaHora').value = '';
   }
 
-  // Cancela la cita (elimina la fila)
+  // Confirmar cancelación: solo cambia estado a "Cancelada"
   function confirmarCancelar() {
     if (filaSeleccionada) {
-      filaSeleccionada.remove();
+      const statusCell = filaSeleccionada.querySelector('.status');
+      statusCell.textContent = 'Cancelada';
+      statusCell.className = 'status Cancelada';
     }
     cerrarModal('modalCancelar');
   }
 
-  // Reprograma la cita (modifica el status)
+  // Confirmar reprogramación: cambia fecha, hora y status
   function confirmarReprogramar() {
+    const nuevaFecha = document.getElementById('nuevaFecha').value;
+    const nuevaHora = document.getElementById('nuevaHora').value;
+
+    if (!nuevaFecha || !nuevaHora) {
+      alert('Por favor ingresa una fecha y una hora válidas');
+      return;
+    }
+
     if (filaSeleccionada) {
+      filaSeleccionada.cells[3].textContent = formatoFecha(nuevaFecha); // Fecha
+      filaSeleccionada.cells[4].textContent = formatoHora(nuevaHora);   // Hora
       const statusCell = filaSeleccionada.querySelector('.status');
       statusCell.textContent = 'Reprogramada';
       statusCell.className = 'status Reprogramada';
     }
+
     cerrarModal('modalReprogramar');
+  }
+
+  // Formatear fecha de YYYY-MM-DD a DD/MM/YYYY
+  function formatoFecha(fechaISO) {
+    const [year, month, day] = fechaISO.split("-");
+    return `${day}/${month}/${year}`;
+  }
+
+  // Formatear hora de 24h a HH:MM - HH:MM (asumiendo 1h duración)
+  function formatoHora(hora) {
+    const [h, m] = hora.split(":").map(Number);
+    let hFin = h + 1;
+    return `${h}:${m.toString().padStart(2, '0')} - ${hFin}:${m.toString().padStart(2, '0')}`;
   }
     </script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
