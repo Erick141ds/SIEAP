@@ -273,8 +273,6 @@
       <div class="filter-buttons">
         <button onclick="sortTable(4)">Hora</button>
         <button onclick="sortTable(3)">Fecha</button>
-        <button onclick="sortTable(1)">Status</button>
-        <button onclick="sortTable(5)">Prioridad</button>
       </div>
     </div>
 
@@ -289,8 +287,7 @@
           <th>Status</th>
           <th>Tutor</th>
           <th>Prioridad</th>
-          <th>C</th>
-          <th>R</th>
+          <th>Eliminar</th>
         </tr>
       </thead>
       <tbody id="citasBody">
@@ -305,11 +302,10 @@
           <td>2024ZDSM01</td>
           <td>24/06/2025</td>
           <td>9:00 - 10:00</td>
-          <td class="status Pendiente">Pendiente</td>
+          <td class="status Atendido">Atendido</td>
           <td>Diana</td>
           <td>Baja</td>
           <td><ion-icon name="trash-outline"></ion-icon></td>
-          <td><ion-icon name="refresh-outline"></ion-icon></td>
         </tr>
         <!-- Agrega más filas según necesites -->
       </tbody>
@@ -329,7 +325,6 @@
           <td>Diana</td>
           <td>Baja</td>
           <td><ion-icon name="trash-outline"></ion-icon></td>
-          <td><ion-icon name="refresh-outline"></ion-icon></td>
         </tr>
         <!-- Agrega más filas según necesites -->
       </tbody>
@@ -345,11 +340,10 @@
           <td>2024ZDSM01</td>
           <td>24/06/2025</td>
           <td>1:00 - 2:00</td>
-          <td class="status Pendiente">Pendiente</td>
+          <td class="status Atendido">Atendido</td>
           <td>Diana</td>
           <td>Baja</td>
           <td><ion-icon name="trash-outline"></ion-icon></td>
-          <td><ion-icon name="refresh-outline"></ion-icon></td>
         </tr>
         <!-- Agrega más filas según necesites -->
       </tbody>
@@ -366,20 +360,16 @@
     </div>
     <div class="options">
       <div>
-        <a href="agenda.html"><ion-icon name="calendar-outline"></ion-icon></a>
-        <a href="agenda.html" class="option">Agendar</a>
+        <a href="inicio.html"><ion-icon name="home-outline"></ion-icon></a>
+        <a href="inicio.html" class="option">Inicio</a>
+      </div>
+        <div>
+        <a href="AgendaA.html"><ion-icon name="calendar-outline"></ion-icon></a>
+        <a href="AgendaA.html" class="option">Agendar</a>
       </div>
       <div>
-        <a href="Citas.html"><ion-icon name="people-outline"></ion-icon></a>
-        <a href="Citas.html" class="option">Citas</a>
-      </div>
-      <div>
-        <a href="Observaciones.html"><ion-icon name="eye-outline"></ion-icon></a>
-        <a href="Observaciones.html" class="option">Observaciones</a>
-      </div>
-      <div>
-        <a href="Canalizaciones.html"><ion-icon name="paper-plane-outline"></ion-icon></a>
-        <a href="Canalizaciones.html" class="option">Canalizaciones</a>
+        <a href="citasA.html"><ion-icon name="people-outline"></ion-icon></a>
+        <a href="citasA.html" class="option">Citas</a>
       </div>
     </div>
   </aside>
@@ -390,9 +380,9 @@
   <!-- MODAL PARA CANCELAR -->
 <div id="modalCancelar" class="modal">
   <div class="modal-content">
-    <h3>¿Estás seguro de cancelar la cita?</h3>
+    <h3>¿Estás seguro de eliminar la cita?</h3>
     <div class="modal-buttons">
-      <button onclick="confirmarCancelar()">Sí, Cancelar</button>
+      <button onclick="confirmarCancelar()">Sí</button>
       <button onclick="cerrarModal('modalCancelar')">No</button>
     </div>
   </div>
@@ -461,15 +451,6 @@
     });
   });
 
-  // Asignar eventos a íconos de reprogramar
-  document.querySelectorAll('ion-icon[name="refresh-outline"]').forEach(icon => {
-    icon.style.cursor = 'pointer';
-    icon.addEventListener('click', function () {
-      filaSeleccionada = this.closest('tr');
-      document.getElementById('modalReprogramar').style.display = 'block';
-    });
-  });
-
   // Cerrar cualquier modal
   function cerrarModal(id) {
     document.getElementById(id).style.display = 'none';
@@ -479,48 +460,12 @@
   }
 
   // Confirmar cancelación: solo cambia estado a "Cancelada"
-  function confirmarCancelar() {
-    if (filaSeleccionada) {
-      const statusCell = filaSeleccionada.querySelector('.status');
-      statusCell.textContent = 'Cancelada';
-      statusCell.className = 'status Cancelada';
-    }
-    cerrarModal('modalCancelar');
+ function confirmarCancelar() {
+  if (filaSeleccionada) {
+    filaSeleccionada.remove(); // Elimina la fila de la tabla
   }
-
-  // Confirmar reprogramación: cambia fecha, hora y status
-  function confirmarReprogramar() {
-    const nuevaFecha = document.getElementById('nuevaFecha').value;
-    const nuevaHora = document.getElementById('nuevaHora').value;
-
-    if (!nuevaFecha || !nuevaHora) {
-      alert('Por favor ingresa una fecha y una hora válidas');
-      return;
-    }
-
-    if (filaSeleccionada) {
-      filaSeleccionada.cells[3].textContent = formatoFecha(nuevaFecha); // Fecha
-      filaSeleccionada.cells[4].textContent = formatoHora(nuevaHora);   // Hora
-      const statusCell = filaSeleccionada.querySelector('.status');
-      statusCell.textContent = 'Reprogramada';
-      statusCell.className = 'status Reprogramada';
-    }
-
-    cerrarModal('modalReprogramar');
-  }
-
-  // Formatear fecha de YYYY-MM-DD a DD/MM/YYYY
-  function formatoFecha(fechaISO) {
-    const [year, month, day] = fechaISO.split("-");
-    return `${day}/${month}/${year}`;
-  }
-
-  // Formatear hora de 24h a HH:MM - HH:MM (asumiendo 1h duración)
-  function formatoHora(hora) {
-    const [h, m] = hora.split(":").map(Number);
-    let hFin = h + 1;
-    return `${h}:${m.toString().padStart(2, '0')} - ${hFin}:${m.toString().padStart(2, '0')}`;
-  }
+  cerrarModal('modalCancelar');
+}
     </script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

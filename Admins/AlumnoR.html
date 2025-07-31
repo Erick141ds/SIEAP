@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Alumnos</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+    *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+    }
+    body {
+      background-color: aliceblue;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }                         
+
+    .contenido {
+      flex: 1;
+    }
+    .aside{
+      height: 100vh;
+      width: 300px;
+      padding: 10px;
+      background: #dee1e6;
+      color: black;
+      position: fixed;
+      transition: all .4s ease;
+    }
+    .head{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 50px;
+      margin-bottom: 30px;
+    }
+    .head img{
+      width: 50px;
+      border-radius: 50%;
+    }
+    .head ion-icon {
+      font-size: 30px;
+      cursor: pointer;
+    }
+    .profile{
+      display: flex;
+      align-items: center;
+    }
+    .profile img {
+      margin-right: 10px;
+    }
+    .options div{
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      cursor: pointer;
+      margin-bottom: 5px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+    }
+    .options div:hover{
+      background-color: rgba(255,255,255,0.254);
+      transition: all .4s ease-in-out;
+    }
+    .options ion-icon{
+      font-size: 1.4rem;
+      margin-right: 10px;
+    }
+    /*MODIFICADORES AL CERRAR EL MENU*/
+    .aside.active{
+      width: 70px;
+      transition: all .4s ease;
+    }
+    .aside.active .option,
+    .aside.active .profile{
+      display: none;
+    }
+    .aside.active .head ion-icon{
+      margin: auto;
+    }
+    .aside.active .options ion-icon{
+      margin: auto;
+    }
+    footer {
+      background: #dee1e6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5px;
+      gap: 20px;
+      color: black;
+      height: 80;
+    }
+    .footer-center i {
+      margin: 0 8px;
+      font-size: 100px;
+      color: #000000;
+    }
+    .texto{
+        width: 200px;
+        height: 50px;
+        justify-content: center;
+        align-items: center;
+        position: obsulute;
+        padding-left: 60px;
+    }
+    .formulario-container {
+  padding: 30px;
+  background-color: aliceblue;
+  display: flex;
+  justify-content: center;
+}
+
+.formulario {
+  background: #d3d3d3;
+  max-width: 900px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.formulario-avatar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.formulario-avatar img {
+  width: 60px;
+}
+
+.formulario-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.columna {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-normal, .input-gray, select {
+  height: 30px;
+  width: 100%;
+  padding: 4px;
+  font-size: 14px;
+  border: 1px solid #999;
+  border-radius: 5px;
+}
+
+.input-gray {
+  background-color: gray;
+  color: white;
+}
+
+.formulario-footer {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.formulario-footer button {
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #226c41;
+  padding: 14px 20px;
+  border-radius: 5px;;
+  display: inline-block;
+  text-align: center;
+  width: 170px;
+  height: 45px;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.formulario-footer button:hover {
+  background-color: #f76c0090;
+}
+.formulario-grid-solo {
+  justify-content: center;
+}
+h1{
+  text-align: center;
+  margin-top: 20px;
+  
+}
+.options a {
+    text-decoration: none;
+    color: black;         
+  }
+
+  .options a:hover {
+    color: #226c41;
+  }
+  .modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-contenido {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 300px;
+  width: 100%;
+}
+
+.modal-botones {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-botones button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#confirmarBtn {
+  background-color: #226c41;
+  color: white;
+}
+
+#cancelarBtn {
+  background-color: #d9534f;
+  color:white;
+}
+
+    </style>
+</head>
+<body>
+  <h1>Registro de Alumnos</h1>
+  <div class="formulario-container">
+  <form class="formulario">
+    <div class="formulario-avatar">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="avatar">
+    </div>
+
+    <div class="formulario-grid formulario-grid-solo">
+      <div class="columna">
+        <label for="idAlumno">ID Alumno</label>
+        <input type="text" id="idAlumno" disabled class="input-gray">
+
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" class="input-normal" placeholder="Nombre del Alumno">
+
+        <label for="apellidoP">Apellido Paterno</label>
+        <input type="text" id="apellidoP" class="input-normal" placeholder="Ingrese el apellido paterno">
+
+        <label for="apellidoM">Apellido Materno</label>
+        <input type="text" id="apellidoM" class="input-normal" placeholder="Ingrese el apellido materno">
+
+        <label for="correo">Correo Electrónico</label>
+        <input type="email" id="correo" class="input-normal" placeholder="Ingrese el correo electronico">
+
+        <label for="carrera">Carrera</label>
+        <select id="carrera" class="input-normal">
+          <option>Seleccionar carrera</option>
+          <option>TIDSM</option>
+          <option>REDES</option>
+          <option>ENTORNOS</option>
+        </select>
+
+        <label for="matricula">Matrícula</label>
+        <input type="text" id="matricula" class="input-normal" placeholder="Ingrese la matrícula">
+
+        <label for="tutor">Tutor</label>
+        <select id="tutor" class="input-normal">
+          <option>Seleccionar tutor</option>
+          <option>DIANA</option>
+          <option>ELIZABETH</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="formulario-footer">
+      <button type="submit">Continuar</button>
+    </div>
+  </form>
+</div>
+
+  <aside class="aside active" id="aside">
+    <div class="head">
+      <div class="profile">
+        <img src="Logoo.png">
+        <p>SIEAP</p>
+      </div>
+      <ion-icon name="menu-outline" id="menu-outline"></ion-icon>
+    </div>
+    <div class="options">
+      <div>
+        <a href="Inicio.html"><ion-icon name="journal-outline"></ion-icon></a>
+        <a href="Inicio.html" class="option">Registros</a>
+      </div>
+      <div>
+        <a href="AlumnoR.html"><ion-icon name="id-card-outline"></ion-icon></a>
+        <a href="AlumnoR.html" class="option">Alumno</a>
+      </div>
+      <div>
+        <a href="Psicologo.html"><ion-icon name="heart-half-outline"></ion-icon></a>
+        <a href="Psicologo.html" class="option">Psicolog@</a>
+      </div>
+      <div>
+        <a href="tutor.html"><ion-icon name="glasses-outline"></ion-icon></a>
+        <a href="tutor.html" class="option">Tutor</a>
+      </div>
+    </div>
+  </aside>
+  
+  <div class="contenido">
+  </div>
+
+   <footer>
+    <div class="footer-left">
+      <p>Universidad Tecnológica de Tlaxcala</p>
+      <img src="logoSieap.png" alt="Sieap" class="texto">
+    </div>
+  </footer>
+  <!-- Modal de Confirmación -->
+    <div id="modalConfirmacion" style="display: none;" class="modal">
+      <div class="modal-contenido">
+        <p>¿Deseas guardar los cambios?</p>
+        <div class="modal-botones">
+          <button id="confirmarBtn">Sí</button>
+          <button id="cancelarBtn">No</button>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      const aside = document.getElementById('aside'),
+      menu = document.getElementById('menu-outline')
+
+      menu.onclick = () => {
+      aside.classList.toggle('active');
+      }
+      const form = document.querySelector('.formulario');
+      const modal = document.getElementById('modalConfirmacion');
+      const confirmarBtn = document.getElementById('confirmarBtn');
+      const cancelarBtn = document.getElementById('cancelarBtn');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault(); // Previene el envío inmediato
+        modal.style.display = 'flex'; // Muestra el modal
+      });
+
+      confirmarBtn.onclick = () => {
+        modal.style.display = 'none';
+        // Aquí puedes hacer el envío real o mostrar otro mensaje
+        alert('Cambios guardados correctamente.');
+        // Si tienes backend o servidor, podrías enviar el formulario con:
+        // form.submit();
+      };
+
+      cancelarBtn.onclick = () => {
+        modal.style.display = 'none';
+      };
+    </script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

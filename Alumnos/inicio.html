@@ -4,22 +4,87 @@
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Inicio - SIEAP</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;1,400&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+    *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+    }
+    body {
+      background-color: aliceblue;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }                         
 
-    *{ margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
-    body{ background:aliceblue; display:flex; flex-direction:column; min-height:100vh; }
-
-    .aside{ height:100vh; width:300px; padding:10px; background:#c9c9c9; position:fixed; transition:0.4s; }
-    .aside.active{ width:70px; }
-    .head{ display:flex; justify-content:space-between; align-items:center; height:50px; margin-bottom:30px; }
-    .head img{ width:50px; border-radius:50%; }
-    .head ion-icon{ font-size:30px; cursor:pointer; color:#000; }
-    .options div{ display:flex; align-items:center; padding:15px; border-radius:10px; cursor:pointer; margin-bottom:5px; }
-    .options div:hover{ background:rgba(255,255,255,0.25); }
-    .options ion-icon{ font-size:1.4rem; margin-right:10px; color:#000; }
-    .aside.active .option, .aside.active .profile{ display:none; }
-    .aside.active .head ion-icon{ margin:auto; }
-    .aside.active .options ion-icon{ margin:auto; }
+    .contenido {
+      flex: 1;
+    }
+    .aside{
+      height: 100vh;
+      width: 300px;
+      padding: 10px;
+      background: #c9c9c9;
+      color: rgb(0, 0, 0);
+      position: fixed;
+      transition: all .4s ease;
+    }
+    .head{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 50px;
+      margin-bottom: 30px;
+    }
+    .head img{
+      width: 50px;
+      border-radius: 50%;
+    }
+    .head ion-icon {
+      font-size: 30px;
+      cursor: pointer;
+      color: #000000;
+    }
+    .profile{
+      display: flex;
+      align-items: center;
+    }
+    .profile img {
+      margin-right: 10px;
+    }
+    .options div{
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      cursor: pointer;
+      margin-bottom: 5px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+    }
+    .options div:hover{
+      background-color: rgba(255,255,255,0.254);
+      transition: all .4s ease-in-out;
+    }
+    .options ion-icon{
+      font-size: 1.4rem;
+      margin-right: 10px;
+      color: #000000;
+    }
+    .aside.active{
+      width: 70px;
+      transition: all .4s ease;
+    }
+    .aside.active .option,
+    .aside.active .profile{
+      display: none;
+    }
+    .aside.active .head ion-icon{
+      margin: auto;
+    }
+    .aside.active .options ion-icon{
+      margin: auto;
+    }
 
     .contenido{ margin-left:300px; flex:1; transition:0.4s; display:flex; justify-content:center; }
     .contenido.shift{ margin-left:70px; }
@@ -51,11 +116,18 @@
       <ion-icon name="menu-outline" id="toggleBtn"></ion-icon>
     </div>
     <div class="options">
-      <div><ion-icon name="home-outline"></ion-icon><a href="inicio.html" class="option">Inicio</a></div>
-      <div><ion-icon name="calendar-outline"></ion-icon><a href="agenda.html" class="option">Agendar</a></div>
-      <div><ion-icon name="people-outline"></ion-icon><a href="Citas.html" class="option">Citas</a></div>
-      <div><ion-icon name="eye-outline"></ion-icon><a href="Observaciones.html" class="option">Observaciones</a></div>
-      <div><ion-icon name="paper-plane-outline"></ion-icon><a href="Canalizaciones.html" class="option">Canalizaciones</a></div>
+       <div>
+        <a href="inicio.html"><ion-icon name="home-outline"></ion-icon></a>
+        <a href="inicio.html" class="option">Inicio</a>
+      </div>
+        <div>
+        <a href="AgendaA.html"><ion-icon name="calendar-outline"></ion-icon></a>
+        <a href="AgendaA.html" class="option">Agendar</a>
+      </div>
+      <div>
+        <a href="citasA.html"><ion-icon name="people-outline"></ion-icon></a>
+        <a href="citasA.html" class="option">Citas</a>
+      </div>
     </div>
   </aside>
 

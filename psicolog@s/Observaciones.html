@@ -214,6 +214,49 @@
     .options a:hover {
       color: #226c41;
     }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .modal-buttons {
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .modal-buttons button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .modal-buttons button:first-child {
+      background-color: #226c41;
+      color: white;
+    }
+
+    .modal-buttons button:last-child {
+      background-color: #d9534f;
+      color: white;
+    }
     </style>
 </head>
 <body>
@@ -295,6 +338,17 @@
   <div class="contenido">
     <!-- Aquí vas a meter contenido -->
   </div>
+  <!-- MODAL PARA CONFIRMAR ENVÍO DE MENSAJE -->
+<div id="modalMensaje" class="modal">
+  <div class="modal-content">
+    <h3>¿Deseas enviar un mensaje?</h3>
+    <div class="modal-buttons">
+      <button onclick="confirmarEnvioMensaje()">Sí</button>
+      <button onclick="cerrarModal('modalMensaje')">No</button>
+    </div>
+  </div>
+</div>
+
 
    <footer>
     <div class="footer-left">
@@ -313,6 +367,35 @@
       menu.onclick = () => {
       aside.classList.toggle('active');
       }
+      let filaMensaje = null;
+
+      document.querySelectorAll('ion-icon[name="mail-outline"]').forEach(icon => {
+        icon.style.cursor = 'pointer';
+        icon.addEventListener('click', function () {
+          filaMensaje = this.closest('tr');
+      document.getElementById('modalMensaje').style.display = 'block';
+      });
+    });
+
+      function confirmarEnvioMensaje() {
+        if (filaMensaje) {
+          const nombre = filaMensaje.querySelector('.perfil-name')?.textContent || 'usuario';
+        alert(`Mensaje enviado a ${nombre}`);
+      }
+          cerrarModal('modalMensaje');
+          filaMensaje = null;
+      }
+      function cerrarModal(modalId){
+        document.getElementById(modalId).style.display = 'none';
+        filaMensaje = null;
+      }
+      window.onclick = function(event) {
+        const modal = document.getElementById('modalMensaje');
+        if (event.target === modal) {
+        cerrarModal('modalMensaje');
+      }
+    };
+
     </script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

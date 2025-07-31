@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>agenta</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+    *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+    }
+    body {
+      background-color: aliceblue;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }                         
+
+    .contenido {
+      flex: 1;
+    }
+    .aside{
+      height: 100vh;
+      width: 300px;
+      padding: 10px;
+      background: linear-gradient(#c9c9c9,#c9c9c9);
+      color: rgb(0, 0, 0);
+      position: fixed;
+      transition: all .4s ease;
+    }
+    .head{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 50px;
+      margin-bottom: 30px;
+    }
+    .head img{
+      width: 50px;
+      border-radius: 50%;
+    }
+    .head ion-icon {
+      font-size: 30px;
+      cursor: pointer;
+    }
+    .profile{
+      display: flex;
+      align-items: center;
+    }
+    .profile img {
+      margin-right: 10px;
+    }
+    .options div{
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      cursor: pointer;
+      margin-bottom: 5px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+    }
+    .options div:hover{
+      background-color: rgba(255,255,255,0.254);
+      transition: all .4s ease-in-out;
+    }
+    .options ion-icon{
+      font-size: 1.4rem;
+      margin-right: 10px;
+    }
+    /*MODIFICADORES AL CERRAR EL MENU*/
+    .aside.active{
+      width: 70px;
+      transition: all .4s ease;
+    }
+    .aside.active .option,
+    .aside.active .profile{
+      display: none;
+    }
+    .aside.active .head ion-icon{
+      margin: auto;
+    }
+    .aside.active .options ion-icon{
+      margin: auto;
+    }
+    footer {
+      background: linear-gradient(#c9c9c9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5px;
+      gap: 20px;
+      color: rgb(0, 0, 0);
+      height: 80;
+    }
+    ion-icon{
+      color: #000000;
+    }
+    .footer-center i {
+      margin: 0 8px;
+      font-size: 100px;
+      color: #000000;
+    }
+    .texto{
+        width: 200px;
+        height: 50px;
+        justify-content: center;
+        align-items: center;
+        position: obsulute;
+        padding-left: 60px;
+    }
+    .contenedor-agenda {
+       width: 90%; max-width: 1100px; margin: 30px auto;
+       background: #fff; border-radius: 10px; padding: 20px;
+      display: flex; gap: 30px;
+}
+    .tabla-horarios { 
+      flex: 3; 
+      position: relative; }
+    .tabla-horarios h3 { 
+      margin-bottom: 15px; 
+      color: #555; }
+    table {
+      width: 100%; border-collapse: collapse; background: white;
+      border-radius: 10px; overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    th, td {
+    border: 1px solid #ccc;  
+    padding: 12px; text-align: center;
+    }
+    th { 
+      background-color: #f1f1f1; }
+    .calendar-panel {
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center;
+    }
+    .calendar-panel h2 { 
+      margin-bottom: 10px; 
+      font-weight: bold; 
+    }
+    .calendar {
+      border: 1px solid #000; 
+      border-radius: 8px; 
+      padding: 10px;
+      background: #f9f9f9; 
+      width: 100%; 
+      margin-top: 20px;
+    }
+    .calendar select, .calendar input {
+      width: 100%; 
+      padding: 8px; 
+      margin-bottom: 10px;
+      border-radius: 6px; 
+      border: 1px solid #000;
+    }
+    .btn-agendar {
+      background-color: #226c41; 
+      color: white; 
+      border: none;
+      padding: 10px 20px; 
+      border-radius: 6px;
+      font-weight: bold; 
+      cursor: pointer; 
+      width: 100%;
+}
+    .btn-agendar:hover { 
+      background-color: #1b5e20; 
+    }
+    ol {
+      list-style: none; 
+      display: grid; 
+      grid-template-columns: repeat(7,1fr);
+      padding: 0; 
+      border: 1px solid #000; 
+      gap: 8px; 
+      margin-top: 10px;
+    }
+    .day-name {
+      background: #eee; 
+      font-weight: bold; 
+      text-align: center;
+    }
+    .calendar-day {
+      padding: 8px; 
+      cursor: pointer; 
+      border-radius: 4px; 
+      text-align: center;
+  }
+.calendar-day:hover { background-color: #d1e7dd; }
+.selected-day { background-color: #226c41; color: white; }
+.ocupado { background-color: #f44336 !important; color: white; pointer-events: none; }
+.disabled-day { background-color: #ccc !important; color: #666; pointer-events: none; }
+.agendado-verde { background-color: #198754; color: white; font-weight: bold; position: relative; }
+.tooltip {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 16px 20px;
+  font-size: 1.1rem;
+  color: #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  z-index: 1000;
+  display: none;
+  max-width: 500px;
+  line-height: 1.6;
+  white-space: pre-line;
+  word-wrap: break-word;
+}
+#modalMensaje {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 2000;
+}
+#modalContenido {
+  background: #fff; padding: 20px; border-radius: 8px; text-align: center;
+  max-width: 500px; font-size: 1.2rem;
+}
+#modalContenido button {
+  margin-top: 15px; padding: 8px 16px; background: #226c41; color: #fff; border: none; border-radius: 4px; cursor: pointer;
+}
+    .titulo{
+      text-align: center;
+      margin-top: 20px;
+    }
+    h2{
+      margin-bottom: 15px;
+    }
+    .options a {
+      text-decoration: none;
+      color: black;         
+    }
+
+    .options a:hover {
+      color: #226c41;
+    }
+    </style>
+</head>
+<body>
+  <div class="contenido">
+  <div class="titulo">
+    <h1>Agendar Citas</h1>
+  </div>
+  <div class="contenedor-agenda">
+    <div class="tabla-horarios">
+      <h3>Horario</h3>
+      <table id="tablaCitas">
+        <thead>
+          <tr>
+            <th>Hora</th>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miércoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>9:00 - 10:00</td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>10:00 - 11:00</td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>11:00 - 12:00</td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>12:00 - 13:00</td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>13:00 - 14:00</td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>14:00 - 15:00</td><td></td><td></td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="tooltip" id="tooltip"></div>
+    </div>
+    <div class="calendar-panel">
+      <h2 id="mesActual">Selecciona un mes</h2>
+      <div class="calendar">
+        <select id="cuatrimestreSelect">
+          <option value="">Selecciona cuatrimestre</option>
+          <option value="0">Enero - Abril</option>
+          <option value="4">Mayo - Agosto</option>
+          <option value="8">Septiembre - Diciembre</option>
+        </select>
+        <select id="mesSelect" disabled>
+          <option value="">Selecciona mes</option>
+        </select>
+        <select id="horaSelect">
+          <option value="">Selecciona hora</option>
+          <option>9:00 - 10:00</option>
+          <option>10:00 - 11:00</option>
+          <option>11:00 - 12:00</option>
+          <option>12:00 - 13:00</option>
+          <option>13:00 - 14:00</option>
+          <option>14:00 - 15:00</option>
+        </select>
+        <input type="text" id="motivoInput" placeholder="Motivo de la cita">
+        <ol id="calendarioDias"></ol>
+        <button class="btn-agendar" id="btnAgendar">Agendar</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <aside class="aside active" id="aside">
+    <div class="head">
+      <div class="profile">
+        <img src="Logoo.png">
+        <p>SIEAP</p>
+      </div>
+      <ion-icon name="menu-outline" id="menu-outline"></ion-icon>
+    </div>
+    <div class="options">
+      <div>
+        <a href="inicio.html"><ion-icon name="home-outline"></ion-icon></a>
+        <a href="inicio.html" class="option">Inicio</a>
+      </div>
+        <div>
+        <a href="AgendaA.html"><ion-icon name="calendar-outline"></ion-icon></a>
+        <a href="AgendaA.html" class="option">Agendar</a>
+      </div>
+      <div>
+        <a href="citasA.html"><ion-icon name="people-outline"></ion-icon></a>
+        <a href="citasA.html" class="option">Citas</a>
+      </div>
+    </div>
+  </aside>
+  
+  <div class="contenido">
+    <!-- Aquí vas a meter contenido -->
+  </div>
+
+   <footer>
+    <div class="footer-left">
+      <p>Universidad Tecnológica de Tlaxcala</p>
+      <img src="logoSieap.png" alt="Sieap" class="texto">
+    </div>
+  </footer>
+
+  <div id="modalMensaje">
+  <div id="modalContenido">
+    <p id="modalTexto"></p>
+    <button onclick="cerrarModal()">Cerrar</button>
+  </div>
+</div>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+<script>
+  const aside = document.getElementById('aside'),
+      menu = document.getElementById('menu-outline')
+
+    menu.onclick = () => {
+    aside.classList.toggle('active');
+}
+  
+const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const calendarioDias = document.getElementById("calendarioDias");
+const mesActual = document.getElementById("mesActual");
+const cuatrimestreSelect = document.getElementById("cuatrimestreSelect");
+const mesSelect = document.getElementById("mesSelect");
+const horaSelect = document.getElementById("horaSelect");
+const motivoInput = document.getElementById("motivoInput");
+const tabla = document.getElementById("tablaCitas").getElementsByTagName("tbody")[0];
+const tooltip = document.getElementById("tooltip");
+const modal = document.getElementById("modalMensaje");
+const modalTexto = document.getElementById("modalTexto");
+let diaSeleccionado = null;
+
+function mostrarModal(mensaje) {
+  modalTexto.textContent = mensaje;
+  modal.style.display = "flex";
+}
+function cerrarModal() {
+  modal.style.display = "none";
+}
+cuatrimestreSelect.addEventListener("change", () => {
+  const inicio = parseInt(cuatrimestreSelect.value);
+  mesSelect.innerHTML = `<option value="">Selecciona mes</option>`;
+  for (let i = inicio; i < inicio+4; i++) {
+    mesSelect.innerHTML += `<option value="${i}">${meses[i]}</option>`;
+  }
+  mesSelect.disabled = false;
+});
+mesSelect.addEventListener("change", () => {
+  const mes = parseInt(mesSelect.value);
+  if (!isNaN(mes)) generarCalendario(mes, 2025);
+});
+function generarCalendario(mes, anio) {
+  calendarioDias.innerHTML = "";
+  diaSeleccionado = null;
+  mesActual.textContent = `${meses[mes]} ${anio}`;
+  const primerDia = new Date(anio, mes, 1).getDay();
+  const diasMes = new Date(anio, mes+1, 0).getDate();
+  const diasSemana = ["LU.","MA.","MI.","JU.","VI.","SA.","DO."];
+  diasSemana.forEach(d => {
+    const li = document.createElement("li");
+    li.textContent = d; li.classList.add("day-name");
+    calendarioDias.appendChild(li);
+  });
+  const offset = (primerDia === 0 ? 6 : primerDia - 1);
+  for (let i = 0; i < offset; i++) calendarioDias.appendChild(document.createElement("li"));
+  for (let dia = 1; dia <= diasMes; dia++) {
+    const li = document.createElement("li");
+    li.textContent = dia;
+    li.classList.add("calendar-day");
+    const fechaObj = new Date(anio, mes, dia);
+    const dow = fechaObj.getDay();
+    if (dow === 0 || dow === 6) li.classList.add("disabled-day");
+    li.addEventListener("click", () => {
+      if (dow === 0 || dow === 6) return;
+      document.querySelectorAll(".calendar-day").forEach(e => e.classList.remove("selected-day"));
+      li.classList.add("selected-day");
+      diaSeleccionado = fechaObj;
+    });
+    calendarioDias.appendChild(li);
+  }
+}
+document.getElementById("btnAgendar").addEventListener("click", () => {
+  if (!diaSeleccionado || !horaSelect.value || !motivoInput.value.trim()) 
+    return mostrarModal("Selecciona un día, una hora y escribe un motivo.");
+  const dow = diaSeleccionado.getDay();
+  if (dow === 0 || dow === 6) 
+    return mostrarModal("No puedes seleccionar sábado o domingo.");
+  const fechaStr = diaSeleccionado.toISOString().split('T')[0];
+  for (let fila of tabla.rows) {
+    for (let c=1; c<=5; c++) {
+      const celda = fila.cells[c];
+      if (celda.getAttribute("data-fecha") === fechaStr) {
+        return mostrarModal("Ya tienes una cita en esa fecha.");
+      }
+    }
+  }
+  const mes = document.getElementById("mesSelect").value;
+const cuatrimestre = document.getElementById("cuatrimestreSelect").value;
+  const col = dow -1, hora = horaSelect.value, motivo = motivoInput.value.trim();
+  for (let i=0;i<tabla.rows.length;i++) {
+    if (tabla.rows[i].cells[0].textContent === hora) {
+      const celda = tabla.rows[i].cells[col+1];
+      celda.textContent = 'Agendado';
+      celda.classList.add("agendado-verde");
+      celda.setAttribute("data-fecha", fechaStr);
+      celda.setAttribute("data-hora", hora);
+      celda.setAttribute("data-motivo", motivo);
+      celda.onmouseenter = e => {
+        const r = e.target.getBoundingClientRect();
+        tooltip.style.top = `${r.top-40}px`;
+        tooltip.style.left = `${r.left}px`;
+        tooltip.innerText = `${hora} | ${fechaStr} | Pendiente | Motivo: ${motivo}`;
+        tooltip.style.display = "block";
+      };
+      celda.onmouseleave = ()=>tooltip.style.display="none";
+
+      // ENVIAR DATOS A DJANGO
+      fetch('/agendar_cita/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')  // Usa esta función para obtener el token CSRF
+        },
+        body: JSON.stringify({
+          fecha: fechaStr,
+          hora: hora,
+          motivo: motivo,
+           mes: mes,
+          cuatrimestre: cuatrimestre
+        })
+      }).then(response => {
+        if (!response.ok) throw new Error("Error al guardar en el servidor.");
+        return response.json();
+      }).then(data => {
+        console.log("Cita guardada:", data);
+      }).catch(error => {
+        console.error("Error:", error);
+        mostrarModal("Error al guardar la cita en el servidor.");
+      });
+
+      return mostrarModal(`Cita agendada:\n${fechaStr} | ${hora} | Motivo: ${motivo} | Estado: Pendiente`);
+    }
+  }
+});
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+</script>
+</body>
+</html>

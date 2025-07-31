@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantalla principal</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+    *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+    }
+    body {
+      background-color: aliceblue;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }                         
+
+    .contenido {
+      flex: 1;
+    }
+    .aside{
+      height: 100vh;
+      width: 300px;
+      padding: 10px;
+      background: #dee1e6;
+      color: black;
+      position: fixed;
+      transition: all .4s ease;
+    }
+    .head{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 50px;
+      margin-bottom: 30px;
+    }
+    .head img{
+      width: 50px;
+      border-radius: 50%;
+    }
+    .head ion-icon {
+      font-size: 30px;
+      cursor: pointer;
+    }
+    .profile{
+      display: flex;
+      align-items: center;
+    }
+    .profile img {
+      margin-right: 10px;
+    }
+    .options div{
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      cursor: pointer;
+      margin-bottom: 5px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+    }
+    .options div:hover{
+      background-color: rgba(255,255,255,0.254);
+      transition: all .4s ease-in-out;
+    }
+    .options ion-icon{
+      font-size: 1.4rem;
+      margin-right: 10px;
+    }
+    /*MODIFICADORES AL CERRAR EL MENU*/
+    .aside.active{
+      width: 70px;
+      transition: all .4s ease;
+    }
+    .aside.active .option,
+    .aside.active .profile{
+      display: none;
+    }
+    .aside.active .head ion-icon{
+      margin: auto;
+    }
+    .aside.active .options ion-icon{
+      margin: auto;
+    }
+    footer {
+      background: #dee1e6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5px;
+      gap: 20px;
+      color: black;
+      height: 80;
+    }
+    .footer-center i {
+      margin: 0 8px;
+      font-size: 100px;
+      color: #000000;
+    }
+    .texto{
+        width: 200px;
+        height: 50px;
+        justify-content: center;
+        align-items: center;
+        position: obsulute;
+        padding-left: 60px;
+    }
+    .main-container {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .search-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .search-bar input {
+      padding: 0.5rem;
+      width: 200px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .filter-buttons button {
+      margin-left: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      background: #006400;
+      color: white;
+      cursor: pointer;
+    }
+    h1{
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    td{
+      text-align: center;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    td img {
+      width: 30px;
+      border-radius: 50%;
+    }
+    .continue-btn {
+      display: block;
+      margin: 2rem auto 0;
+      padding: 0.75rem 2rem;
+      background: #006400;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .perfil{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .perfil img{
+      width: 40px;
+      height: 40px;
+      border-radius: 50px;
+    }
+    tbody tr:hover{
+      background: rgba(137, 137, 137, 0.254);
+      cursor: pointer;
+    }
+    .status {
+      font-weight: bold;
+    }
+    .status.Activa {
+      color: #f76c00;
+    }
+    .status.Baja {
+      color: red;
+    }
+    .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+
+  .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+  }
+
+  .modal-buttons {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .modal-buttons button {
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  #cancelDelete {
+    background-color: #d9534f;
+    color: white;
+  }
+
+  #confirmDelete {
+    background-color: #226c41;
+    color: white;
+  }
+  .options a {
+    text-decoration: none;
+    color: black;         
+  }
+
+  .options a:hover {
+    color: #226c41;
+  }
+    /*linear-gradient(#f76c00,#3f1c5d);*/
+    /*linear-gradient(#3f1c5d,#3f1c5d);*/
+    </style>
+</head>
+<body>
+  <div id="confirmModal" style="display:none;" class="modal-overlay">
+  <div class="modal-content">
+    <h3>¿Estás seguro de eliminar este registro?</h3>
+    <div class="modal-buttons">
+      <button id="cancelDelete">No</button>
+      <button id="confirmDelete">Si</button>
+    </div>
+  </div>
+</div>
+  <div class="main-container">
+    <h1>Registros</h1>
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Buscar...">
+      <div class="filter-buttons">
+        <button onclick="sortTable(4)">Rol</button>
+        <button onclick="sortTable(3)">Status</button>
+      </div>
+    </div>
+
+    <table id="citasTable">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Nombre</th>
+          <th>Correo electronico</th>
+          <th>Contraseña</th>
+          <th>Rol</th>
+          <th>Status</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody id="citasBody">
+        <tr>
+          <td>01</td>
+          <td>
+            <div class="perfil">
+              <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Demis">
+              <span class="perfil-name">Demis</span>
+            </div>
+          </td>
+          <td>demisCS@gamil.com</td>
+          <td>123456789</td>
+          <td>Estudiante</td>
+          <td class="status Activa">Activa</td>
+          <td>20/07/2025</td>
+          <td>10:08 pm</td>
+          <td><ion-icon name="trash-outline"></ion-icon></td>
+        </tr>
+        <tr>
+          <td>02</td>
+          <td>
+            <div class="perfil">
+              <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Demis">
+              <span class="perfil-name">Demis</span>
+            </div>
+          </td>
+          <td>demisCS@gamil.com</td>
+          <td>123456789</td>
+          <td>Tutor</td>
+          <td class="status Baja">Baja</td>
+          <td>20/07/2025</td>
+          <td>10:08 pm</td>
+          <td><ion-icon name="trash-outline"></ion-icon></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <aside class="aside active" id="aside">
+    <div class="head">
+      <div class="profile">
+        <img src="Logoo.png">
+        <p>SIEAP</p>
+      </div>
+      <ion-icon name="menu-outline" id="menu-outline"></ion-icon>
+    </div>
+    <div class="options">
+      <div>
+        <a href="Inicio.html"><ion-icon name="journal-outline"></ion-icon></a>
+        <a href="Inicio.html" class="option">Registros</a>
+      </div>
+      <div>
+        <a href="AlumnoR.html"><ion-icon name="id-card-outline"></ion-icon></a>
+        <a href="AlumnoR.html" class="option">Alumno</a>
+      </div>
+      <div>
+        <a href="Psicologo.html"><ion-icon name="heart-half-outline"></ion-icon></a>
+        <a href="Psicologo.html" class="option">Psicolog@</a>
+      </div>
+      <div>
+        <a href="tutor.html"><ion-icon name="glasses-outline"></ion-icon></a>
+        <a href="tutor.html" class="option">Tutor</a>
+      </div>
+    </div>
+  </aside>
+  
+  <div class="contenido">
+    <!-- Aquí vas a meter contenido -->
+  </div>
+
+   <footer>
+    <div class="footer-left">
+      <p>Universidad Tecnológica de Tlaxcala</p>
+      <img src="logoSieap.png" alt="Sieap" class="texto">
+    </div>
+  </footer>
+
+    <script>
+  const aside = document.getElementById('aside');
+  const menu = document.getElementById('menu-outline');
+
+  menu.onclick = () => {
+    aside.classList.toggle('active');
+  };
+
+  // Busqueda en tiempo real
+  document.getElementById('search').addEventListener('keyup', function () {
+    const filter = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#citasBody tr');
+
+    rows.forEach(row => {
+      const nombre = row.querySelector('.perfil-name').textContent.toLowerCase();
+      const correo = row.cells[2].textContent.toLowerCase();
+      const rol = row.cells[4].textContent.toLowerCase();
+      const status = row.cells[5].textContent.toLowerCase();
+
+      if (
+        nombre.includes(filter) ||
+        correo.includes(filter) ||
+        rol.includes(filter) ||
+        status.includes(filter)
+      ) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+
+  // Ordenar tabla
+  function sortTable(columnIndex) {
+    const table = document.getElementById('citasTable');
+    let switching = true;
+    let direction = 'asc';
+    let switchcount = 0;
+
+    while (switching) {
+      switching = false;
+      const rows = table.rows;
+
+      for (let i = 1; i < rows.length - 1; i++) {
+        let shouldSwitch = false;
+        const x = rows[i].getElementsByTagName('TD')[columnIndex];
+        const y = rows[i + 1].getElementsByTagName('TD')[columnIndex];
+
+        if (direction === 'asc' && x.textContent.toLowerCase() > y.textContent.toLowerCase()) {
+          shouldSwitch = true;
+        } else if (direction === 'desc' && x.textContent.toLowerCase() < y.textContent.toLowerCase()) {
+          shouldSwitch = true;
+        }
+
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          switchcount++;
+          break;
+        }
+      }
+
+      if (switchcount === 0 && direction === 'asc') {
+        direction = 'desc';
+        switching = true;
+      }
+    }
+  }
+
+  // Modal de eliminación
+  let rowToDelete = null;
+  const modal = document.getElementById('confirmModal');
+  const cancelBtn = document.getElementById('cancelDelete');
+  const confirmBtn = document.getElementById('confirmDelete');
+
+  document.querySelectorAll('ion-icon[name="trash-outline"]').forEach(icon => {
+    icon.addEventListener('click', function () {
+      rowToDelete = this.closest('tr');
+      modal.style.display = 'flex';
+    });
+  });
+
+  cancelBtn.onclick = () => {
+    modal.style.display = 'none';
+    rowToDelete = null;
+  };
+
+  confirmBtn.onclick = () => {
+    if (rowToDelete) {
+      rowToDelete.remove();
+      modal.style.display = 'none';
+    }
+  };
+    </script>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
