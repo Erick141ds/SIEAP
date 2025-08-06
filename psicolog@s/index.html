@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -169,45 +170,112 @@ body{
 }
 .conteiner.toggle .welcome-sing-up{
     transform: translateX(-100%);
-}     
+}
+/* Mensajes de Django */
+.messages {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.alert {
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.alert-error {
+    background-color: #fee;
+    color: #c33;
+    border: 1px solid #fcc;
+}
+
+.alert-success {
+    background-color: #efe;
+    color: #3c3;
+    border: 1px solid #cfc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .conteiner {
+        width: 95%;
+        height: auto;
+        flex-direction: column;
+    }
+
+    .conteiner-form {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .conteiner-welcome {
+        position: relative;
+        width: 100%;
+        transform: none;
+        border-radius: 0;
+    }
+
+    .conteiner-form form {
+        position: relative;
+    }
+}  
     </style>
 
 </head>
 <body>
-    
+    <!-- Mensajes de Django -->
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
     <div class="conteiner">
         <div class="conteiner-form">
-            <form class="sing-in">
+            <form class="sing-in method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
                 <h2>Iniciar sesión</h2>
-                <div class="social-network">
+                <!--
+                <<div class="social-network">
                     <ion-icon name="logo-facebook"></ion-icon>
                     <ion-icon name="logo-youtube"></ion-icon>
                     <ion-icon name="logo-tiktok"></ion-icon>
                     <ion-icon name="logo-whatsapp"></ion-icon>
-                </div>
+                </div>>
+                -->
                 <span>Use su usuario y contraseña</span>
                 <div class="conteiner-input">
-                    <ion-icon name="mail"></ion-icon>
-                    <input type="text" placeholder="Correo">
+                    <ion-icon name="person" aria-hidden="true"></ion-icon>
+                    <input type="text" name="username" placeholder="Usuario" required autocomplete="username">
                 </div>
                 <div class="conteiner-input">
-                    <ion-icon name="lock-closed"></ion-icon>
-                    <input type="password" placeholder="Contraseña">
+                    <ion-icon name="lock-closed" aria-hidden="true"></ion-icon>
+                    <input type="password" name="password" placeholder="Contraseña" required autocomplete="current-password">
                 </div>
-                <a href="">¿Olvidaste tu contraseña?</a>
-                <a href="agenda.html" class="button">INICIAR SESIÓN</a>
+                <button type="submit" class="button">INICIAR SESIÓN</button>
             </form>
 
         </div>
+        
         <div class="conteiner-form">
-            <form class="sing-up">
+            <form class="sing-up" method="POST" action="{% url 'registro' %}">
+                {% csrf_token %}
                 <h2>Registrarse</h2>
                 <div class="social-network">
-                    <ion-icon name="logo-facebook"></ion-icon>
-                    <ion-icon name="logo-youtube"></ion-icon>
-                    <ion-icon name="logo-tiktok"></ion-icon>
-                    <ion-icon name="logo-whatsapp"></ion-icon>
+                    <ion-icon name="logo-facebook" aria-hidden="true"></ion-icon>
+                    <ion-icon name="logo-youtube" aria-hidden="true"></ion-icon>
+                    <ion-icon name="logo-tiktok" aria-hidden="true"></ion-icon>
+                    <ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon>
                 </div>
+                <!--
                 <span>Use su correo electronico para registrarse</span>
                 <div class="conteiner-input">
                     <ion-icon name="person"></ion-icon>
@@ -221,8 +289,9 @@ body{
                     <ion-icon name="lock-closed"></ion-icon>
                     <input type="password" placeholder="Contraseña">
                 </div>
-            <button class="button"></a>REGISTRARSE</button>
+                <button class="button"></a>REGISTRARSE</button>
             </form>
+            -->
             
         </div>
 
@@ -230,13 +299,14 @@ body{
             <div class="welcome-sing-up welcome">
                 <h3>¡BIENVENIDO A SIEAP!</h3>
                 <P>Ingrese sus datos personales para usar todas las funciones del sistema</P>
-                <img src="Ingreso.png" width="200px" height="150px">
+                <img src="{% static 'agenda/logoSieap.png' %}" width="200px" height="150px" alt="SIEAP Logo">
+                <!--<button class="button" id="btn-sing-up">REGISTRARSE</button> -->
                 
             </div>
             <div class="welcome-sing-in welcome">
                 <h3>¡HOLA!</h3>
                 <p>Registre sus datos personales para usar todas las funciones del sitema</p>
-                <img src="Ingreso.png" width="200px" height="150px">
+                <img src="{% static 'agenda/logoSieap.png' %}" width="200px" height="150px" alt="SIEAP Logo">
                 <button class="button" id="btn-sing-in">INICIAR SESIÓN</button>
 
             </div>
@@ -261,6 +331,10 @@ body{
         btnSingUp.addEventListener("click", ()=>{
         conteiner.classList.add("toggle");
         })
+        // Auto-toggle si hay errores en el formulario de registro
+        {% if form.errors %}
+            conteiner.classList.add("toggle");
+        {% endif %}
     </script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>

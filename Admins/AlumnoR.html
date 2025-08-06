@@ -245,6 +245,63 @@ h1{
   background-color: #d9534f;
   color:white;
 }
+/* RESPONSIVO */
+@media screen and (max-width: 768px) {
+  .aside {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .aside.active {
+    width: 100%;
+  }
+
+  .contenido {
+    margin-left: 0;
+  }
+
+  .formulario {
+    padding: 15px;
+  }
+
+  .formulario-grid {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-left img {
+    width: 100px;
+    padding-left: 0;
+  }
+
+  .modal-contenido {
+    width: 90%;
+    max-width: 90%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .formulario-footer button {
+    width: 100%;
+  }
+}
+
+/* Ajuste del contenido respecto al menú lateral */
+.contenido {
+  flex: 1;
+  margin-left: 300px;
+  transition: margin-left 0.4s ease;
+}
+.aside.active ~ .contenido {
+  margin-left: 70px;
+}
 
     </style>
 </head>

@@ -249,6 +249,43 @@
   .options a:hover {
     color: #226c41;
   }
+  @media (max-width: 1024px) {
+  .aside {
+    width: 200px;
+  }
+}
+/* Responsivo */
+@media (max-width: 768px) {
+  .aside {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    width: 220px;
+    height: 100vh;
+    z-index: 1000;
+  }
+
+  .aside.active {
+    left: 0;
+    width: 220px;
+  }
+
+  .main-container {
+    padding: 1rem;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+}
     /*linear-gradient(#f76c00,#3f1c5d);*/
     /*linear-gradient(#3f1c5d,#3f1c5d);*/
     </style>
