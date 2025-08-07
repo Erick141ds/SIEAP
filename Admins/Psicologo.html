@@ -108,73 +108,82 @@
         position: obsulute;
         padding-left: 60px;
         }
-     .formulario-container {
-        padding: 40px;
-        background-color: #dcdcdc;
-        max-width: 800px;
-        margin: 40px auto;
-        border: 1px solid #000;
-        border-radius: 8px;
-      }
+        .formulario-container {
+      padding: 30px;
+      background-color: aliceblue;
+      display: flex;
+      justify-content: center;
+    }
 
-      .formulario-avatar {
-        text-align: center;
-        margin-bottom: 20px;
-      }
+    .formulario {
+      background: #d3d3d3;
+      max-width: 900px;
+      width: 100%;
+      padding: 20px;
+      border-radius: 10px;
+    }
 
-      .formulario-avatar img {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-      }
+    .formulario-avatar {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-      .formulario {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px 30px;
-        align-items: center;
-      }
+    .formulario-avatar img {
+      width: 60px;
+    }
 
-      .formulario label {
-        margin-bottom: 4px;
-      }
+    .formulario-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
 
-      .formulario input,
-      .formulario select {
-        padding: 8px;
-        border: 1px solid black;
-        border-radius: 4px;
-        font-size: 1rem;
-        width: 100%;
-      }
+    .columna {
+      flex: 1;
+      min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-      /* Para alinear etiquetas e inputs */
-      .form-group {
-        display: flex;
-        flex-direction: column;
-      }
+    .input-normal, .input-gray, select {
+      height: 30px;
+      width: 100%;
+      padding: 4px;
+      font-size: 14px;
+      border: 1px solid #999;
+      border-radius: 5px;
+    }
 
-      /* Botón en parte inferior derecha */
-      .formulario .boton-container {
-        grid-column: 2;
-        display: flex;
-        justify-content: flex-end;
-      }
+    .input-gray {
+      background-color: gray;
+      color: white;
+    }
 
-      .formulario button {
-        text-decoration: none;
-        color: #ffffff;
-        background-color: #226c41;
-        padding: 12px 20px;
-        border-radius: 6px;
-        font-size: 1rem;
-        border: none;
-        cursor: pointer;
-      }
+    .formulario-footer {
+      text-align: right;
+      margin-top: 20px;
+    }
 
-      .formulario button:hover {
-        background-color: #f76c0090;
-      }
+    .formulario-footer button {
+      text-decoration: none;
+      color: #ffffff;
+      background-color: #226c41;
+      padding: 14px 20px;
+      border-radius: 5px;
+      display: inline-block;
+      text-align: center;
+      width: 170px;
+      height: 45px;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .formulario-footer button:hover {
+      background-color: #f76c0090;
+    }
     h1{
       text-align: center;
       margin-top: 20px;
@@ -273,76 +282,47 @@
 </head>
 <body>
   <h1>Registro de Psicolog@</h1>
-<div class="formulario-container">
-  <div class="formulario-avatar">
-    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="avatar" />
+  <div class="formulario-container">
+    <form class="formulario">
+      <div class="formulario-avatar">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+      </div>
+      <div class="formulario-grid">
+        <div class="columna">
+          <label for="No.empleado">No.Empleado</label>
+          <input type="text" id="No.empleado" class="input-normal" placeholder="Número de Empleado">
+
+          <label for="Nombre">Nombre</label>
+          <input type="text" id="Nombre" class="input-normal" placeholder="Nombre del Psicolog@">
+
+          <label for="apellidoP">Apellido paterno</label>
+          <input type="text" id="apellidoP" class="input-normal" placeholder="Apellido Paterno">
+
+          <label for="apellidoM">Apellido materno</label>
+          <input type="text" id="apellidoM" class="input-normal" placeholder="Apellido Materno">
+
+          <label for="turno">Turno</label>
+          <select id="Turno">
+            <option>Seleccionar turno</option>
+            <option>Matutino</option>
+            <option>Vespertino</option>
+          </select>
+
+          <label for="cargaAdmin">Carga administrativa</label>
+          <input type="text" id="cargaAdmin" class="input-normal" placeholder="Carga administrativa">
+
+          <label for="Correo">Correo electrónico</label>
+          <input type="text" id="Correo" class="input-normal" placeholder="Correo electronico">
+
+          <label for="Telefono">Teléfono</label>
+          <input type="text" id="Telefono" class="input-normal" placeholder="Telefono">
+        </div>
+      </div>
+      <div class="formulario-footer">
+        <button type="submit">Continuar</button>
+      </div>
+    </form>
   </div>
-
-  <form class="formulario">
-    <!-- Columna izquierda -->
-    <div class="form-group">
-      <label for="id">ID</label>
-      <input type="text" id="id" disabled style="background-color: gray;" />
-    </div>
-
-    <div class="form-group">
-      <label for="correo">Correo electrónico</label>
-      <input type="email" id="correo" placeholder="Ingrese el correo electrónico" />
-    </div>
-
-    <div class="form-group">
-      <label for="noEmpleado">No. Empleado</label>
-      <input type="text" id="noEmpleado" placeholder="Ingrese el número de empleado" />
-    </div>
-
-    <div class="form-group">
-      <label for="telefono">Teléfono</label>
-      <input type="tel" id="telefono" placeholder="Ingrese el número de teléfono" />
-    </div>
-
-    <div class="form-group">
-      <label for="nombre">Nombre</label>
-      <input type="text" id="nombre" placeholder="Nombre del Psicólogo" />
-    </div>
-
-    <div class="form-group"></div>
-
-    <div class="form-group">
-      <label for="apellidoPaterno">Apellido Paterno</label>
-      <input type="text" id="apellidoPaterno" placeholder="Apellido Paterno del Psicólogo" />
-    </div>
-
-    <div class="form-group"></div>
-
-    <div class="form-group">
-      <label for="apellidoMaterno">Apellido Materno</label>
-      <input type="text" id="apellidoMaterno" placeholder="Apellido Materno del Psicólogo" />
-    </div>
-
-    <div class="form-group"></div>
-
-    <div class="form-group">
-      <label for="turno">Turno</label>
-      <select id="turno">
-        <option>Elige</option>
-        <option>Matutino</option>
-        <option>Vespertino</option>
-      </select>
-    </div>
-
-    <div class="form-group"></div>
-
-    <div class="form-group">
-      <label for="carga">Carga administrativa</label>
-      <input type="text" id="carga" placeholder="Ingrese la carga administrativa" />
-    </div>
-
-    <!-- Botón alineado a la derecha -->
-    <div class="boton-container">
-      <button type="submit">Continuar</button>
-    </div>
-  </form>
-</div>
 
   <aside class="aside active" id="aside">
     <div class="head">
@@ -411,10 +391,6 @@
 
       confirmarBtn.onclick = () => {
         modal.style.display = 'none';
-        // Aquí puedes hacer el envío real o mostrar otro mensaje
-        alert('Cambios guardados correctamente.');
-        // Si tienes backend o servidor, podrías enviar el formulario con:
-        // form.submit();
       };
 
       cancelarBtn.onclick = () => {

@@ -315,9 +315,6 @@ h1{
 
     <div class="formulario-grid formulario-grid-solo">
       <div class="columna">
-        <label for="idAlumno">ID Alumno</label>
-        <input type="text" id="idAlumno" disabled class="input-gray">
-
         <label for="nombre">Nombre</label>
         <input type="text" id="nombre" class="input-normal" placeholder="Nombre del Alumno">
 
@@ -333,9 +330,13 @@ h1{
         <label for="carrera">Carrera</label>
         <select id="carrera" class="input-normal">
           <option>Seleccionar carrera</option>
-          <option>TIDSM</option>
-          <option>REDES</option>
-          <option>ENTORNOS</option>
+          <option>TI-DSM</option>
+          <option>TI-YRD</option>
+          <option>TI-EVND</option>
+          <option>IDGS</option>
+          <option>IRIC</option>
+          <option>IEVND</option>
+          <option>ITII</option>
         </select>
 
         <label for="matricula">Matrícula</label>
@@ -344,8 +345,7 @@ h1{
         <label for="tutor">Tutor</label>
         <select id="tutor" class="input-normal">
           <option>Seleccionar tutor</option>
-          <option>DIANA</option>
-          <option>ELIZABETH</option>
+          <option>DIANA HUATZI REYES</option>
         </select>
       </div>
     </div>
@@ -393,48 +393,95 @@ h1{
       <img src="logoSieap.png" alt="Sieap" class="texto">
     </div>
   </footer>
-  <!-- Modal de Confirmación -->
-    <div id="modalConfirmacion" style="display: none;" class="modal">
-      <div class="modal-contenido">
-        <p>¿Deseas guardar los cambios?</p>
-        <div class="modal-botones">
-          <button id="confirmarBtn">Sí</button>
-          <button id="cancelarBtn">No</button>
-        </div>
+ <div id="modalConfirmacion" style="display: none;" class="modal">
+    <div class="modal-contenido">
+      <p>¿Deseas guardar los cambios?</p>
+      <div class="modal-botones">
+        <button id="confirmarBtn">Sí</button>
+        <button id="cancelarBtn">No</button>
       </div>
     </div>
+  </div>
 
+  <!-- Modal de Error -->
+  <div id="modalError" style="display: none;" class="modal">
+    <div class="modal-contenido">
+      <p>Por favor, completa todos los campos requeridos correctamente.</p>
+      <div class="modal-botones">
+        <button id="cerrarErrorBtn">Aceptar</button>
+      </div>
+    </div>
+  </div>
 
-    <script>
-      const aside = document.getElementById('aside'),
-      menu = document.getElementById('menu-outline')
+  <!-- Modal de caracteres -->
+  <div id="modalCaracter" style="display: none;" class="modal">
+    <div class="modal-contenido">
+      <p>Por favor, escribe solo letras en nombre y apellidos.</p>
+      <div class="modal-botones">
+        <button id="cerrarCaracterBtn">Aceptar</button>
+      </div>
+    </div>
+  </div>
 
-      menu.onclick = () => {
+  <script>
+    const aside = document.getElementById('aside');
+    const menu = document.getElementById('menu-outline');
+    const form = document.querySelector('.formulario');
+    const modal = document.getElementById('modalConfirmacion');
+    const modalError = document.getElementById('modalError');
+    const modalCaracter = document.getElementById('modalCaracter');
+    const confirmarBtn = document.getElementById('confirmarBtn');
+    const cancelarBtn = document.getElementById('cancelarBtn');
+    const cerrarErrorBtn = document.getElementById('cerrarErrorBtn');
+    const cerrarCaracterBtn = document.getElementById('cerrarCaracterBtn');
+
+    menu.onclick = () => {
       aside.classList.toggle('active');
-      }
-      const form = document.querySelector('.formulario');
-      const modal = document.getElementById('modalConfirmacion');
-      const confirmarBtn = document.getElementById('confirmarBtn');
-      const cancelarBtn = document.getElementById('cancelarBtn');
+    };
 
-      form.addEventListener('submit', function (e) {
-        e.preventDefault(); // Previene el envío inmediato
-        modal.style.display = 'flex'; // Muestra el modal
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const nombre = document.getElementById('nombre');
+      const apellidoP = document.getElementById('apellidoP');
+      const apellidoM = document.getElementById('apellidoM');
+      const campos = form.querySelectorAll('.input-normal, select');
+      let valido = true;
+
+      campos.forEach(campo => campo.style.border = '1px solid #999');
+
+      campos.forEach(campo => {
+        if (campo.value.trim() === '' || campo.value.includes("Seleccionar")) {
+          campo.style.border = '2px solid red';
+          valido = false;
+        }
       });
 
-      confirmarBtn.onclick = () => {
-        modal.style.display = 'none';
-        // Aquí puedes hacer el envío real o mostrar otro mensaje
-        alert('Cambios guardados correctamente.');
-        // Si tienes backend o servidor, podrías enviar el formulario con:
-        // form.submit();
-      };
+      const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+      if (!regex.test(nombre.value.trim()) ||
+          !regex.test(apellidoP.value.trim()) ||
+          !regex.test(apellidoM.value.trim())) {
+        modalCaracter.style.display = 'flex';
+        return;
+      }
 
-      cancelarBtn.onclick = () => {
-        modal.style.display = 'none';
-      };
-    </script>
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+      if (!valido) {
+        modalError.style.display = 'flex';
+        return;
+      }
+
+      modal.style.display = 'flex';
+    });
+
+    confirmarBtn.onclick = () => modal.style.display = 'none';
+    cancelarBtn.onclick = () => modal.style.display = 'none';
+    cerrarErrorBtn.onclick = () => modalError.style.display = 'none';
+    cerrarCaracterBtn.onclick = () => modalCaracter.style.display = 'none';
+  </script>
+
+  <!-- Ionicons -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
 </body>
 </html>
