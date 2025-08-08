@@ -245,6 +245,12 @@ h1{
   background-color: #d9534f;
   color:white;
 }
+.mensaje-error {
+  color: red;
+  font-size: 13px;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
 /* RESPONSIVO */
 @media screen and (max-width: 768px) {
   .aside {
@@ -317,15 +323,19 @@ h1{
       <div class="columna">
         <label for="nombre">Nombre</label>
         <input type="text" id="nombre" class="input-normal" placeholder="Nombre del Alumno">
+        <span id="errorNombre" class="mensaje-error"></span>
 
         <label for="apellidoP">Apellido Paterno</label>
         <input type="text" id="apellidoP" class="input-normal" placeholder="Ingrese el apellido paterno">
+        <span id="errorApellidoP" class="mensaje-error"></span>
 
         <label for="apellidoM">Apellido Materno</label>
         <input type="text" id="apellidoM" class="input-normal" placeholder="Ingrese el apellido materno">
+        <span id="errorApellidoM" class="mensaje-error"></span>
 
         <label for="correo">Correo Electrónico</label>
         <input type="email" id="correo" class="input-normal" placeholder="Ingrese el correo electronico">
+        <span id="errorCorreo" class="mensaje-error"></span>
 
         <label for="carrera">Carrera</label>
         <select id="carrera" class="input-normal">
@@ -338,15 +348,18 @@ h1{
           <option>IEVND</option>
           <option>ITII</option>
         </select>
+        <span id="errorCarrera" class="mensaje-error"></span>
 
         <label for="matricula">Matrícula</label>
         <input type="text" id="matricula" class="input-normal" placeholder="Ingrese la matrícula">
+        <span id="errorMatricula" class="mensaje-error"></span>
 
         <label for="tutor">Tutor</label>
         <select id="tutor" class="input-normal">
           <option>Seleccionar tutor</option>
           <option>DIANA HUATZI REYES</option>
         </select>
+        <span id="errorTutor" class="mensaje-error"></span>
       </div>
     </div>
 
@@ -403,80 +416,120 @@ h1{
     </div>
   </div>
 
-  <!-- Modal de Error -->
-  <div id="modalError" style="display: none;" class="modal">
-    <div class="modal-contenido">
-      <p>Por favor, completa todos los campos requeridos correctamente.</p>
-      <div class="modal-botones">
-        <button id="cerrarErrorBtn">Aceptar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal de caracteres -->
-  <div id="modalCaracter" style="display: none;" class="modal">
-    <div class="modal-contenido">
-      <p>Por favor, escribe solo letras en nombre y apellidos.</p>
-      <div class="modal-botones">
-        <button id="cerrarCaracterBtn">Aceptar</button>
-      </div>
-    </div>
-  </div>
-
   <script>
     const aside = document.getElementById('aside');
-    const menu = document.getElementById('menu-outline');
-    const form = document.querySelector('.formulario');
-    const modal = document.getElementById('modalConfirmacion');
-    const modalError = document.getElementById('modalError');
-    const modalCaracter = document.getElementById('modalCaracter');
-    const confirmarBtn = document.getElementById('confirmarBtn');
-    const cancelarBtn = document.getElementById('cancelarBtn');
-    const cerrarErrorBtn = document.getElementById('cerrarErrorBtn');
-    const cerrarCaracterBtn = document.getElementById('cerrarCaracterBtn');
+  const menu = document.getElementById('menu-outline');
+  const form = document.querySelector('.formulario');
+  const modal = document.getElementById('modalConfirmacion');
+  const confirmarBtn = document.getElementById('confirmarBtn');
+  const cancelarBtn = document.getElementById('cancelarBtn');
 
-    menu.onclick = () => {
-      aside.classList.toggle('active');
-    };
+  menu.onclick = () => {
+    aside.classList.toggle('active');
+  };
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
 
-      const nombre = document.getElementById('nombre');
-      const apellidoP = document.getElementById('apellidoP');
-      const apellidoM = document.getElementById('apellidoM');
-      const campos = form.querySelectorAll('.input-normal, select');
-      let valido = true;
+    
+    const nombre = document.getElementById('nombre');
+    const apellidoP = document.getElementById('apellidoP');
+    const apellidoM = document.getElementById('apellidoM');
+    const correo = document.getElementById('correo');
+    const carrera = document.getElementById('carrera');
+    const matricula = document.getElementById('matricula');
+    const tutor = document.getElementById('tutor');
 
-      campos.forEach(campo => campo.style.border = '1px solid #999');
+  
+    const errorNombre = document.getElementById('errorNombre');
+    const errorApellidoP = document.getElementById('errorApellidoP');
+    const errorApellidoM = document.getElementById('errorApellidoM');
+    const errorCorreo = document.getElementById('errorCorreo');
+    const errorCarrera = document.getElementById('errorCarrera');
+    const errorMatricula = document.getElementById('errorMatricula');
+    const errorTutor = document.getElementById('errorTutor');
 
-      campos.forEach(campo => {
-        if (campo.value.trim() === '' || campo.value.includes("Seleccionar")) {
-          campo.style.border = '2px solid red';
-          valido = false;
-        }
-      });
+    
+    errorNombre.textContent = '';
+    errorApellidoP.textContent = '';
+    errorApellidoM.textContent = '';
+    errorCorreo.textContent = '';
+    errorCarrera.textContent = '';
+    errorMatricula.textContent = '';
+    errorTutor.textContent = '';
 
-      const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
-      if (!regex.test(nombre.value.trim()) ||
-          !regex.test(apellidoP.value.trim()) ||
-          !regex.test(apellidoM.value.trim())) {
-        modalCaracter.style.display = 'flex';
-        return;
-      }
+    const letrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const matriculaRegex = /^[a-zA-Z0-9]+$/;
 
-      if (!valido) {
-        modalError.style.display = 'flex';
-        return;
-      }
+    let valido = true;
 
+   
+    if (nombre.value.trim() === '') {
+      errorNombre.textContent = 'El nombre es obligatorio';
+      valido = false;
+    } else if (!letrasRegex.test(nombre.value.trim())) {
+      errorNombre.textContent = 'Solo se permiten letras';
+      valido = false;
+    }
+
+
+    if (apellidoP.value.trim() === '') {
+      errorApellidoP.textContent = 'El apellido paterno es obligatorio';
+      valido = false;
+    } else if (!letrasRegex.test(apellidoP.value.trim())) {
+      errorApellidoP.textContent = 'Solo se permiten letras';
+      valido = false;
+    }
+
+    if (apellidoM.value.trim() === '') {
+      errorApellidoM.textContent = 'El apellido materno es obligatorio';
+      valido = false;
+    } else if (!letrasRegex.test(apellidoM.value.trim())) {
+      errorApellidoM.textContent = 'Solo se permiten letras';
+      valido = false;
+    }
+
+
+    if (correo.value.trim() === '') {
+      errorCorreo.textContent = 'El correo es obligatorio';
+      valido = false;
+    } else if (!correoRegex.test(correo.value.trim())) {
+      errorCorreo.textContent = 'Correo inválido';
+      valido = false;
+    }
+
+    if (carrera.value === 'Seleccionar carrera') {
+      errorCarrera.textContent = 'Selecciona una carrera';
+      valido = false;
+    }
+
+    if (matricula.value.trim() === '') {
+      errorMatricula.textContent = 'La matrícula es obligatoria';
+      valido = false;
+    } else if (!matriculaRegex.test(matricula.value.trim())) {
+      errorMatricula.textContent = 'Solo letras y números permitidos';
+      valido = false;
+    }
+
+    if (tutor.value === 'Seleccionar tutor') {
+      errorTutor.textContent = 'Selecciona un tutor';
+      valido = false;
+    }
+
+    if (valido) {
       modal.style.display = 'flex';
-    });
+    }
+  });
 
-    confirmarBtn.onclick = () => modal.style.display = 'none';
-    cancelarBtn.onclick = () => modal.style.display = 'none';
-    cerrarErrorBtn.onclick = () => modalError.style.display = 'none';
-    cerrarCaracterBtn.onclick = () => modalCaracter.style.display = 'none';
+  confirmarBtn.onclick = () => {
+    modal.style.display = 'none';
+    form.submit();
+  };
+
+  cancelarBtn.onclick = () => {
+    modal.style.display = 'none';
+  };
   </script>
 
   <!-- Ionicons -->

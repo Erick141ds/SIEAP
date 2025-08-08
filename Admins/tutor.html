@@ -318,6 +318,12 @@
     .aside.active ~ .contenido {
       margin-left: 70px;
     }
+    .mensaje-error {
+      color: red;
+      font-size: 13px;
+      margin-top: -5px;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -361,15 +367,23 @@
         <div class="columna">
           <label for="noEmpleado">No. Empleado</label>
           <input type="text" id="noEmpleado" class="input-normal" placeholder="Ingrese el número de empleado">
+          <span id="errorEmpleado" class="mensaje-error"></span>
 
           <label for="nombre">Nombre</label>
           <input type="text" id="nombre" class="input-normal" placeholder="Nombre del Tutor">
+          <span id="errorNombre" class="mensaje-error"></span>
 
           <label for="apellidoP">Apellido Paterno</label>
           <input type="text" id="apellidoP" class="input-normal" placeholder="Ingrese el apellido paterno">
+          <span id="errorAperllidoP" class="mensaje-error"></span>
 
           <label for="apellidoM">Apellido Materno</label>
           <input type="text" id="apellidoM" class="input-normal" placeholder="Ingrese el apellido materno">
+          <span id="errorApellidoM" class="mensaje-error"></span>
+
+          <label for="correo">Correo electronico</label>
+          <input type="email" id="correo" class="input-normal" placeholder="Ingrese el correo electronico" required>
+          <span id="errorCorreo" class="mensaje-error"></span> 
 
           <label for="carrera">Carrera Perteneciente</label>
           <select id="carrera" class="input-normal">
@@ -378,6 +392,7 @@
             <option>MODA</option>
             <option>Mecatrónica</option>
           </select>
+          <span id="errorCarrera" class="mensaje-error"></span>
 
           <label for="especialidad">Especialidad</label>
           <select id="especialidad" class="input-normal">
@@ -386,6 +401,7 @@
             <option>Tics</option>
             <option>Entornos</option>
           </select>
+          <span id="errorEspecialidad" class="mensaje-error"></span>
         </div>
 
         <div class="columna">
@@ -395,6 +411,7 @@
             <option>2025</option>
             <option>2026</option>
           </select>
+          <span id="errorAnioEscolar" class="mensaje-error"></span>
 
           <label for="cuatrimestre">Cuatrimestre</label>
           <select id="cuatrimestre" class="input-normal">
@@ -404,15 +421,18 @@
             <option>Enero - Febrero</option>
             <option>Marzo - Abril</option>
           </select>
+          <span id="errorCuatrimestre" class="mensaje-error"></span>
 
           <label for="grupos">Grupos Tutorados</label>
           <input type="text" id="grupos" class="input-normal" placeholder="Ingrese los grupos tutorados">
+          <span id="errorGrupos" class="mensaje-error"></span>
 
           <label for="edificio">Edificio</label>
           <select id="edificio" class="input-normal">
             <option>Seleccionar edificio</option>
             <option>P</option>
           </select>
+          <span id="errorEdificio" class="mensaje-error"></span>
 
           <label for="aula">Aula</label>
           <select id="aula" class="input-normal">
@@ -433,10 +453,11 @@
             <option>LA-REDES1</option>
             <option>LA-REDES2</option>
           </select>
+          <span id="errorAula" class="mensaje-error"></span>
 
           <label for="cubo">Cubo</label>
           <select id="cubo" class="input-normal">
-            <option>Elige</option>
+            <option>Seleccionar cubo</option>
             <option>C1</option>
             <option>C2</option>
             <option>C3</option>
@@ -458,6 +479,10 @@
             <option>C19</option>
             <option>C20</option>
           </select>
+          <span id="errorCubo" class="mensaje-error"></span>
+          <label for="telefono">Teléfono</label>
+          <input type="tel" id="telefono" class="input-normal" placeholder="Ingrese el número de teléfono" required>
+          <span id="errorTelefono" class="mensaje-error"></span>
         </div>
       </div>
 
@@ -486,53 +511,168 @@
   </footer>
 
   <script>
-    const aside = document.getElementById('aside'),
-          menu = document.getElementById('menu-outline');
-    menu.onclick = () => {
-      aside.classList.toggle('active');
-    }
+    // Mostrar y ocultar el menú lateral
+  const aside = document.getElementById('aside'),
+        menu = document.getElementById('menu-outline');
+  menu.onclick = () => {
+    aside.classList.toggle('active');
+  }
 
-    // Validación para solo letras
-    function soloLetras(input) {
-      input.value = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
-    }
+  // Función para permitir solo letras
+  function soloLetras(input) {
+    input.value = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+  }
 
-    const nombre = document.getElementById('nombre');
-    const apellidoP = document.getElementById('apellidoP');
-    const apellidoM = document.getElementById('apellidoM');
+  // Aplicar solo letras a campos de texto
+  const nombre = document.getElementById('nombre');
+  const apellidoP = document.getElementById('apellidoP');
+  const apellidoM = document.getElementById('apellidoM');
+  nombre.addEventListener('input', () => soloLetras(nombre));
+  apellidoP.addEventListener('input', () => soloLetras(apellidoP));
+  apellidoM.addEventListener('input', () => soloLetras(apellidoM));
 
-    nombre.addEventListener('input', () => soloLetras(nombre));
-    apellidoP.addEventListener('input', () => soloLetras(apellidoP));
-    apellidoM.addEventListener('input', () => soloLetras(apellidoM));
+  // Validaciones
+  const form = document.querySelector('.formulario');
+  const modal = document.getElementById('modalConfirmacion');
+  const confirmarBtn = document.getElementById('confirmarBtn');
+  const cancelarBtn = document.getElementById('cancelarBtn');
 
-    const form = document.querySelector('.formulario');
-    const modal = document.getElementById('modalConfirmacion');
-    const confirmarBtn = document.getElementById('confirmarBtn');
-    const cancelarBtn = document.getElementById('cancelarBtn');
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      // Validar que los campos de nombre y apellidos solo tengan letras
-      const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
-
-      if (!regex.test(nombre.value.trim()) ||
-          !regex.test(apellidoP.value.trim()) ||
-          !regex.test(apellidoM.value.trim())) {
-        alert('Por favor, escribe solo letras en nombre y apellidos.');
-        return;
-      }
-
-      modal.style.display = 'flex';
-    });
-
-    confirmarBtn.onclick = () => {
-      modal.style.display = 'none';
+    // Obtener campos
+    const campos = {
+      noEmpleado: document.getElementById("noEmpleado"),
+      nombre: document.getElementById("nombre"),
+      apellidoP: document.getElementById("apellidoP"),
+      apellidoM: document.getElementById("apellidoM"),
+      correo: document.getElementById("correo"),
+      carrera: document.getElementById("carrera"),
+      especialidad: document.getElementById("especialidad"),
+      anioEscolar: document.getElementById("anioEscolar"),
+      cuatrimestre: document.getElementById("cuatrimestre"),
+      grupos: document.getElementById("grupos"),
+      edificio: document.getElementById("edificio"),
+      aula: document.getElementById("aula"),
+      cubo: document.getElementById("cubo"),
+      telefono: document.getElementById("telefono")
     };
 
-    cancelarBtn.onclick = () => {
-      modal.style.display = 'none';
+    // Obtener spans de error
+    const errores = {
+      noEmpleado: document.getElementById("errorEmpleado"),
+      nombre: document.getElementById("errorNombre"),
+      apellidoP: document.getElementById("errorAperllidoP"),
+      apellidoM: document.getElementById("errorApellidoM"),
+      correo: document.getElementById("errorCorreo"),
+      carrera: document.getElementById("errorCarrera"),
+      especialidad: document.getElementById("errorEspecialidad"),
+      anioEscolar: document.getElementById("errorAnioEscolar"),
+      cuatrimestre: document.getElementById("errorCuatrimestre"),
+      grupos: document.getElementById("errorGrupos"),
+      edificio: document.getElementById("errorEdificio"),
+      aula: document.getElementById("errorAula"),
+      cubo: document.getElementById("errorCubo"),
+      telefono: document.getElementById("errorTelefono")
     };
+
+    // Limpiar errores
+    Object.values(errores).forEach(span => span.textContent = "");
+
+    // Expresiones regulares
+    const soloLetrasExp = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    const letrasYNumerosExp = /^[A-Za-z0-9]+$/;
+    const correoExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const telefonoExp = /^[0-9]{10}$/;
+
+    let hayErrores = false;
+
+    // Validaciones individuales
+    if (!letrasYNumerosExp.test(campos.noEmpleado.value.trim())) {
+      errores.noEmpleado.textContent = "Solo letras y números.";
+      hayErrores = true;
+    }
+
+    if (!soloLetrasExp.test(campos.nombre.value.trim())) {
+      errores.nombre.textContent = "Solo se permiten letras.";
+      hayErrores = true;
+    }
+
+    if (!soloLetrasExp.test(campos.apellidoP.value.trim())) {
+      errores.apellidoP.textContent = "Solo se permiten letras.";
+      hayErrores = true;
+    }
+
+    if (!soloLetrasExp.test(campos.apellidoM.value.trim())) {
+      errores.apellidoM.textContent = "Solo se permiten letras.";
+      hayErrores = true;
+    }
+
+    if (!correoExp.test(campos.correo.value.trim())) {
+      errores.correo.textContent = "Correo inválido. Ej: usuario@dominio.com";
+      hayErrores = true;
+    }
+
+    if (campos.carrera.value === "Seleccionar carrera") {
+      errores.carrera.textContent = "Selecciona una carrera.";
+      hayErrores = true;
+    }
+
+    if (campos.especialidad.value === "Seleccionar Especialidad") {
+      errores.especialidad.textContent = "Selecciona una especialidad.";
+      hayErrores = true;
+    }
+
+    if (campos.anioEscolar.value === "Seleccionar año escolar") {
+      errores.anioEscolar.textContent = "Selecciona un año escolar.";
+      hayErrores = true;
+    }
+
+    if (campos.cuatrimestre.value === "Seleccionar cuatrimestre") {
+      errores.cuatrimestre.textContent = "Selecciona un cuatrimestre.";
+      hayErrores = true;
+    }
+
+    if (campos.grupos.value.trim() === "") {
+      errores.grupos.textContent = "Escribe al menos un grupo.";
+      hayErrores = true;
+    }
+
+    if (campos.edificio.value === "Seleccionar edificio") {
+      errores.edificio.textContent = "Selecciona un edificio.";
+      hayErrores = true;
+    }
+
+    if (campos.aula.value === "Seleccionar aula") {
+      errores.aula.textContent = "Selecciona un aula.";
+      hayErrores = true;
+    }
+
+    if (campos.cubo.value === "Seleccionar cubo") {
+      errores.cubo.textContent = "Selecciona un cubo.";
+      hayErrores = true;
+    }
+
+    if (!telefonoExp.test(campos.telefono.value.trim())) {
+      errores.telefono.textContent = "Debe tener exactamente 10 dígitos numéricos.";
+      hayErrores = true;
+    }
+
+    // Si todo está bien, mostrar modal
+    if (!hayErrores) {
+      modal.style.display = "flex";
+    }
+  });
+
+  confirmarBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+    alert("Formulario enviado correctamente.");
+    form.submit();
+  });
+
+  cancelarBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
   </script>
 
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

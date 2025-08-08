@@ -241,6 +241,12 @@
   background-color: #d9534f;
   color:white;
 }
+.mensaje-error {
+  color: red;
+  font-size: 13px;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
 /*ESTILOS RESPONSIVOS*/
 @media (max-width: 1024px) {
   .aside {
@@ -291,15 +297,23 @@
         <div class="columna">
           <label for="No.empleado">No.Empleado</label>
           <input type="text" id="No.empleado" class="input-normal" placeholder="Número de Empleado">
+          <span id="errorEmpleado" class="mensaje-error"></span>
 
           <label for="Nombre">Nombre</label>
           <input type="text" id="Nombre" class="input-normal" placeholder="Nombre del Psicolog@">
+          <span id="errorNombre" class="mensaje-error"></span>
 
           <label for="apellidoP">Apellido paterno</label>
           <input type="text" id="apellidoP" class="input-normal" placeholder="Apellido Paterno">
+          <span id="errorApellidoP" class="mensaje-error"></span>
 
           <label for="apellidoM">Apellido materno</label>
           <input type="text" id="apellidoM" class="input-normal" placeholder="Apellido Materno">
+          <span id="errorApellidoM" class="mensaje-error"></span>
+
+          <label for="Correo">Correo electrónico</label>
+          <input type="email" id="Correo" class="input-normal" placeholder="Correo electronico" required>
+          <span id="errormail" class="mensaje-error"></span>
 
           <label for="turno">Turno</label>
           <select id="Turno">
@@ -307,15 +321,15 @@
             <option>Matutino</option>
             <option>Vespertino</option>
           </select>
+          <span id="errorTurno" class="mensaje-error"></span>
 
           <label for="cargaAdmin">Carga administrativa</label>
           <input type="text" id="cargaAdmin" class="input-normal" placeholder="Carga administrativa">
-
-          <label for="Correo">Correo electrónico</label>
-          <input type="text" id="Correo" class="input-normal" placeholder="Correo electronico">
+          <span id="errorCarga" class="mensaje-error"></span>
 
           <label for="Telefono">Teléfono</label>
-          <input type="text" id="Telefono" class="input-normal" placeholder="Telefono">
+          <input type="tel" id="Telefono" class="input-normal" placeholder="Telefono">
+          <span id="errorTelefono" class="mensaje-error"></span>
         </div>
       </div>
       <div class="formulario-footer">
@@ -373,29 +387,134 @@
   </footer>
 
     <script>
-      const aside = document.getElementById('aside'),
-      menu = document.getElementById('menu-outline')
+     const aside = document.getElementById("aside"),
+            menu = document.getElementById("menu-outline");
 
-      menu.onclick = () => {
-      aside.classList.toggle('active');
-      }
-      const form = document.querySelector('.formulario');
-      const modal = document.getElementById('modalConfirmacion');
-      const confirmarBtn = document.getElementById('confirmarBtn');
-      const cancelarBtn = document.getElementById('cancelarBtn');
+        menu.onclick = () => {
+            aside.classList.toggle("active");
+        };
 
-      form.addEventListener('submit', function (e) {
-        e.preventDefault(); // Previene el envío inmediato
-        modal.style.display = 'flex'; // Muestra el modal
-      });
+        const formulario = document.querySelector(".formulario");
+        const modal = document.getElementById("modalConfirmacion");
+        const confirmarBtn = document.getElementById("confirmarBtn");
+        const cancelarBtn = document.getElementById("cancelarBtn");
 
-      confirmarBtn.onclick = () => {
-        modal.style.display = 'none';
-      };
+        formulario.addEventListener("submit", function (e) {
+            e.preventDefault();
 
-      cancelarBtn.onclick = () => {
-        modal.style.display = 'none';
-      };
+            const nombre = document.getElementById("Nombre");
+            const apellidoP = document.getElementById("apellidoP");
+            const apellidoM = document.getElementById("apellidoM");
+            const noEmpleado = document.getElementById("No.empleado");
+            const turno = document.getElementById("Turno");
+            const cargaAdmin = document.getElementById("cargaAdmin");
+            const correo = document.getElementById("Correo");
+            const telefono = document.getElementById("Telefono");
+
+            const errorNombre = document.getElementById("errorNombre");
+            const errorApellidoP = document.getElementById("errorApellidoP");
+            const errorApellidoM = document.getElementById("errorApellidoM");
+            const errorEmpleado = document.getElementById("errorEmpleado");
+            const errorTurno = document.getElementById("errorTurno");
+            const errorCarga = document.getElementById("errorCarga");
+            const errorCorreo = document.getElementById("errormail");
+            const errorTelefono = document.getElementById("errorTelefono");
+
+            errorNombre.textContent = "";
+            errorApellidoP.textContent = "";
+            errorApellidoM.textContent = "";
+            errorEmpleado.textContent = "";
+            errorTurno.textContent = "";
+            errorCarga.textContent = "";
+            errorCorreo.textContent = "";
+            errorTelefono.textContent = "";
+
+            let hayErrores = false;
+
+            const soloLetras = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+$/;
+            const letrasYNumeros = /^[A-Za-z0-9]+$/;
+            const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const soloNumeros10 = /^[0-9]{10}$/;
+
+            
+            if (!noEmpleado.value.trim()) {
+                errorEmpleado.textContent = "El número de empleado es obligatorio.";
+                hayErrores = true;
+            } else if (!letrasYNumeros.test(noEmpleado.value.trim())) {
+                errorEmpleado.textContent = "Solo se permiten letras y números en No.Empleado.";
+                hayErrores = true;
+            }
+
+           
+            if (!nombre.value.trim()) {
+                errorNombre.textContent = "El nombre es obligatorio.";
+                hayErrores = true;
+            } else if (!soloLetras.test(nombre.value.trim())) {
+                errorNombre.textContent = "El nombre solo debe contener letras.";
+                hayErrores = true;
+            }
+
+            if (!apellidoP.value.trim()) {
+                errorApellidoP.textContent = "El apellido paterno es obligatorio.";
+                hayErrores = true;
+            } else if (!soloLetras.test(apellidoP.value.trim())) {
+                errorApellidoP.textContent = "El apellido paterno solo debe contener letras.";
+                hayErrores = true;
+            }
+
+            
+            if (!apellidoM.value.trim()) {
+                errorApellidoM.textContent = "El apellido materno es obligatorio.";
+                hayErrores = true;
+            } else if (!soloLetras.test(apellidoM.value.trim())) {
+                errorApellidoM.textContent = "El apellido materno solo debe contener letras.";
+                hayErrores = true;
+            }
+
+            
+            if (turno.value === "Seleccionar turno") {
+                errorTurno.textContent = "Selecciona un turno válido.";
+                hayErrores = true;
+            }
+
+           
+            if (!cargaAdmin.value.trim()) {
+                errorCarga.textContent = "La carga administrativa es obligatoria.";
+                hayErrores = true;
+            }
+
+           
+            if (!correo.value.trim()) {
+                errorCorreo.textContent = "El correo es obligatorio.";
+                hayErrores = true;
+            } else if (!correoRegex.test(correo.value.trim())) {
+                errorCorreo.textContent = "Correo electrónico inválido.";
+                hayErrores = true;
+            }
+
+            
+            if (!telefono.value.trim()) {
+                errorTelefono.textContent = "El teléfono es obligatorio.";
+                hayErrores = true;
+            } else if (!soloNumeros10.test(telefono.value.trim())) {
+                errorTelefono.textContent = "El teléfono debe tener exactamente 10 dígitos numéricos.";
+                hayErrores = true;
+            }
+
+            if (hayErrores) return;
+
+            
+            modal.style.display = "flex";
+        });
+
+        confirmarBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+            formulario.submit();
+        });
+
+        cancelarBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
     </script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
